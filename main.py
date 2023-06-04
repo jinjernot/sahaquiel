@@ -1,6 +1,7 @@
 import pandas as pd
 from openpyxl import load_workbook
-from openpyxl.styles import PatternFill, Font, Border, Side
+from openpyxl.styles import PatternFill, Font, Border, Side, Alignment
+
 
 def load_raw():
     try:
@@ -12,6 +13,7 @@ def load_raw():
 
 def main():
     df = load_raw()
+    #df = df.iloc[:, :47]  # Delete columns from index 47 to the end
     if df is not None:
         workbook = load_workbook("RAW.xlsm")
         writer = pd.ExcelWriter("new_file.xlsm", engine="openpyxl")
@@ -45,7 +47,140 @@ def main():
                 sheet.column_dimensions[cell.column_letter].width = 30
                 cell.row
                 sheet.row_dimensions[cell.row].height = 60
-                
+
+        # Specify the row number to modify
+        row_num = 7
+
+        # Specify the desired height
+        height = 60
+
+        # Set the height for the specified row
+        sheet.row_dimensions[row_num].height = height
+        # Set the alignment for the specified row
+        alignment = Alignment(horizontal='center', vertical='center')
+
+        for cell in sheet[row_num]:
+            cell.alignment = alignment
+
+        # Define the range to merge
+        merge_range = "K8:O8"
+
+        # Merge the cells
+        sheet.merge_cells(merge_range)
+
+        # Set the alignment for the merged cell
+        merged_cell = sheet["K8"]
+        merged_cell.alignment = Alignment(horizontal='center', vertical='center')
+
+        # Define the range to merge
+        merge_range = "P7:U7"
+
+        # Merge the cells
+        sheet.merge_cells(merge_range)
+
+        # Set the alignment for the merged cell
+        merged_cell = sheet["P7"]
+        merged_cell.alignment = Alignment(horizontal='center', vertical='center')
+
+        # Define the range to merge
+        merge_range = "X7:AB7"
+
+        # Merge the cells
+        sheet.merge_cells(merge_range)
+
+        # Set the alignment for the merged cell
+        merged_cell = sheet["X7"]
+        merged_cell.alignment = Alignment(horizontal='center', vertical='center')
+
+        # Define the range to merge
+        merge_range = "AF7:AK7"
+
+        # Merge the cells
+        sheet.merge_cells(merge_range)
+
+        # Set the alignment for the merged cell
+        merged_cell = sheet["AF7"]
+        merged_cell.alignment = Alignment(horizontal='center', vertical='center')
+
+
+        # Define the range to merge
+        merge_range = "P5:W6"
+
+        # Get the value of cell S6
+        cell_S6_value = sheet["S6"].value
+
+        # Merge the cells
+        sheet.merge_cells(merge_range)
+
+        # Set the alignment for the merged cell
+        merged_cell = sheet["P5"]
+        merged_cell.alignment = Alignment(horizontal='center', vertical='center')
+
+
+        # Assign the value of cell S6 to the merged cell
+        merged_cell.value = cell_S6_value
+
+        # Define the range to merge
+        merge_range = "X5:AE6"
+
+        # Get the value of cell AA6
+        cell_AA6_value = sheet["AA6"].value
+
+        # Merge the cells
+        sheet.merge_cells(merge_range)
+
+        # Set the alignment for the merged cell
+        merged_cell = sheet["X5"]
+        merged_cell.alignment = Alignment(horizontal='center', vertical='center')
+
+        # Assign the value of cell AA6 to the merged cell
+        merged_cell.value = cell_AA6_value
+
+
+
+        # Define the range to merge
+        merge_range = "AF5:AM6"
+
+        # Get the value of cell AI6
+        cell_AI6_value = sheet["AI6"].value
+
+        # Merge the cells
+        sheet.merge_cells(merge_range)
+
+        # Set the alignment for the merged cell
+        merged_cell = sheet["AF5"]
+        merged_cell.alignment = Alignment(horizontal='center', vertical='center')
+
+        # Assign the value of cell AI6 to the merged cell
+        merged_cell.value = cell_AI6_value
+
+        # Define the range to merge
+        merge_range = "AN5:AV6"
+
+        # Get the value of cell AQ6
+        cell_AQ6_value = sheet["AQ6"].value
+
+        # Merge the cells
+        sheet.merge_cells(merge_range)
+
+        # Set the alignment for the merged cell
+        merged_cell = sheet["AN5"]
+        merged_cell.alignment = Alignment(horizontal='center', vertical='center')
+
+        # Assign the value of cell AQ6 to the merged cell
+        merged_cell.value = cell_AQ6_value
+
+        merge_range = "AN7:AS7"
+
+        # Merge the cells
+        sheet.merge_cells(merge_range)
+
+        # Set the alignment for the merged cell
+        merged_cell = sheet["AN7"]
+        merged_cell.alignment = Alignment(horizontal='center', vertical='center')
+
+
+
         # Select the ranges
         Box_Info = sheet["K8:O11"]
         Standard_AIR_IP = sheet["P5:W11"]
@@ -62,36 +197,97 @@ def main():
             Customer_Specific_EP: "34d1da",
         }
 
-        # Apply background colors to each range
+        # Define the border style
+        border_style = Border(
+            top=Side(border_style="thin"),
+            bottom=Side(border_style="thin"),
+            left=Side(border_style="thin"),
+            right=Side(border_style="thin")
+        )
+
+        # Apply background colors and borders to each range
         for range_, color in colors.items():
             for row in range_:
                 for cell in row:
                     cell.fill = PatternFill(start_color=color, end_color=color, fill_type="solid")
-
+                    cell.border = border_style
+               
         # Define border style
-        border_style = Side(border_style="thin", color="000000")
+        #border_style = Side(border_style="thin", color="000000")
 
-        # Apply border to rows 9 and 10
-        for row_num in range(9, 11):
-            for col_num in range(1, sheet.max_column + 1):
-                cell = sheet.cell(row=row_num, column=col_num)
-                cell.border = Border(top=border_style, bottom=border_style, left=border_style, right=border_style)
-
-
+        #Apply border to rows starting from 9 and below
+        #for row_num in range(12, sheet.max_row + 1):
+         #   for col_num in range(1, sheet.max_column + 1):
+         #       cell = sheet.cell(row=row_num, column=col_num)
+         #       cell.border = Border(top=border_style, bottom=border_style, left=border_style, right=border_style)
 
         # Insert text into cell A3 and increase font size
         sheet["A3"] = "PSG EMEA PRODUCTS Weight, Dimensions, Pallet data"
         #sheet["A3"].font = Font(size=16)
+        # Set background color
         
-        # Insert text into cell A6
-        sheet["A6"] = "HP Confidential. For HP and Partner internal use only. The information contained herein is HP Confidential. Disclosure is governed by your HP Partner Agreement, HP Retail Partner Agreement, or another applicable contract (e.g., Confidential Disclosure Agreement)."
+        # Insert text into cells
+        fontred = Font(color="FF0000")
+        sheet["A6"].font = fontred
+        sheet["A6"] = "HP Confidential. For HP and Partner internal use only"
+        sheet["A7"] = "The information contained herein is HP Confidential. Disclosure is governed by your HP Partner Agreement, HP Retail Partner Agreement, or another applicable contract (e.g., Confidential Disclosure Agreement)."
         
         # Delete content from cell A5
         sheet["A5"].value = None
 
         # Add autofilters to row 11
-        sheet.auto_filter.ref = "A11:J11"
+        sheet.auto_filter.ref = "A11:AV11"   
+
+        # Define the border style
+        border_style_top = Border(top=Side(border_style="thick"))
+        border_style_bottom = Border(bottom=Side(border_style="thick"))
+        border_style_left = Border(left=Side(border_style="thick"))
+
+        # Select the ranges of cells
+        range_top = sheet["P5:AV5"]
+        range_bottom = sheet["P11:AV11"]
+        ranges_left = ["P5:P11", "X5:X11", "AF5:AF11", "AN5:AN11", "AW5:AW11"]
+
+        # Apply the border style to the top and bottom sides of the ranges
+        for row_top, row_bottom, in zip(range_top, range_bottom):
+            for cell_top, cell_bottom in zip(row_top, row_bottom):
+                cell_top.border = cell_top.border + border_style_top
+                cell_bottom.border = cell_bottom.border + border_style_bottom
+
+        for ranges_left in ranges_left:
+            cells = sheet[ranges_left]
+            for row in cells:
+                for cell in row:
+                    cell.border = cell.border + border_style_left
         
+        # Select the ranges of cells
+        range_top2 = sheet["K8:O8"]
+        range_left2 = sheet["K8:K11"]
+        range_bottom2 = sheet["K11:O11"]
+
+        # Apply the top border style to the range_top2
+        for row_top in range_top2:
+            for cell_top in row_top:
+                cell_top.border = cell_top.border + border_style_top
+
+        # Apply the left border style to the range_left2
+        for row_left in range_left2:
+            for cell_left in row_left:
+                cell_left.border = cell_left.border + border_style_left
+
+        # Apply the bottom border style to the range_bottom2
+        for row_bottom in range_bottom2:
+            for cell_bottom in row_bottom:
+                cell_bottom.border = cell_bottom.border + border_style_bottom
+
+
+        fill = PatternFill(start_color="f6eddc", end_color="f6eddc", fill_type="solid")
+
+        # Apply background color to rows 9 and 10
+        for row_num in range(9, 11):
+            for col_num in range(1, sheet.max_column + 1):
+                cell = sheet.cell(row=row_num, column=col_num)
+                cell.fill = fill
 
         # Save the workbook
         writer.save()
